@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# must run in git directory
+# 1. git log
+# 2. strip space before ticket #
+# 3. strip newline when comment end with newline
+
+git log --pretty='format:%cd=%s %b(%cn)'  --no-merges -n 10 $@ | perl -C -pe 's/\s*(\#\d+)(.*)/\1\2/' | awk 'm=/\)$/ {printf "%s\n", $0} !m {printf "%s",$0}'
+
+
