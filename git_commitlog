@@ -3,8 +3,12 @@
 # must run in git directory
 # 1. git log
 # 2. strip space before ticket #
-# 3. strip newline when comment end with newline
+# 3. strip newline when comment end with newline, and support --stat
+#git log --pretty='format:%cd=%s %b(%cn)'  --no-merges -n 10 $@ | perl -C -pe 's/\s*(\#\d+)(.*)/\1\2/' | awk 'm=/\)$/ {printf "%s\n", $0} !m {printf "%s",$0}'
+# support --stat
+git log --pretty='format:%cd=%s %b(%cn)'  --no-merges -n 10 $@ | perl -C -pe 's/\s*(\#\d+)(.*)/\1\2/' | awk 'm=/\)$/ {printf "%s\n", $0} !m { if ($0 ~ /[\|\+|changed]/)  print $0; else  printf "%s",$0; }'
 
-git log --pretty='format:%cd=%s %b(%cn)'  --no-merges -n 10 $@ | perl -C -pe 's/\s*(\#\d+)(.*)/\1\2/' | awk 'm=/\)$/ {printf "%s\n", $0} !m {printf "%s",$0}'
 
 
+# colored
+#git log --pretty='format:%cd=%s %b(%cn)'  --no-merges -n 10 $@ |grep -e '\w' | perl -C -pe 's/\s*(\#\d+)(.*)/\033[1;32m\1\033[m\2/'
