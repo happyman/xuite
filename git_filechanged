@@ -1,0 +1,2 @@
+#!/bin/bash
+/home/user/happyman/bin/git_commitlog.php -n 100 -t $1 -h  |xargs -n 1 git show --name-only |grep hoder |sort |uniq 
